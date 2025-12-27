@@ -1,0 +1,5 @@
+const CONFIG = {
+    domain: 'example.com',
+    defaultRedirect: 'example.com',
+    timeoutSeconds: 30
+};

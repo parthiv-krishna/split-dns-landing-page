@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">VPN Required</title>
+</head>
+<body>
+    <h1 id="page-heading">VPN Connection Required</h1>
+    <p id="message"></p>
+    <p id="countdown"></p>
+
+    <script src="config.js"></script>
+    <script>
+        document.getElementById('page-title').textContent = `${CONFIG.domain} VPN Required`;
+        document.getElementById('page-heading').textContent = `${CONFIG.domain} VPN Connection Required`;
+
+        const params = new URLSearchParams(window.location.search);
+        const redirect = params.get('redirect') || CONFIG.defaultRedirect;
+
+        document.getElementById('message').innerHTML =
+            `You attempted to visit <a href="https://${redirect}">${redirect}</a>, but you're not connected to the ${CONFIG.domain} VPN. Please connect to the ${CONFIG.domain} VPN and try again.`;
+
+        let seconds = CONFIG.timeoutSeconds;
+        const countdownEl = document.getElementById('countdown');
+
+        function updateCountdown() {
+            countdownEl.textContent = `Automatically redirecting in ${seconds} seconds`;
+
+            if (seconds === 0) {
+                window.location.href = `https://${redirect}`;
+            } else {
+                seconds--;
+                setTimeout(updateCountdown, 1000);
+            }
+        }
+
+        updateCountdown();
+    </script>
+</body>
+</html>
